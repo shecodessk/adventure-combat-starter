@@ -1,10 +1,10 @@
-class Room {
+const {Item} = require("../class/item.js");
+class Room extends Item{
 
   constructor(name, description) {
-    this.name = name;
-    this.description = description;
-    this.exits = {};
-    this.items = [];
+     super(name, description)
+        this.exits = {};
+        this.items = [];
   }
 
   getEnemies() {
@@ -53,16 +53,18 @@ class Room {
 
   getItemByName(name) {
 
-    // Fill this in
+             let result = this.items.find(
+            (el) => name === el.name )
 
-  }
+            return result;
+}
 
   getEnemyByName(name) {
-
-    // Fill this in
-
+    // code here
 }
 }
+
+
 module.exports = {
   Room,
 };

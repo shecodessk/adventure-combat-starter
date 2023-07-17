@@ -1,9 +1,16 @@
 const {Character} = require('./character');
+const { Room } = require('./room');
+const { Item } = require('./item');
+const { Player } = require('./player');
+const { Food } = require('./food');
 
 
 class Enemy extends Character {
-  constructor(name, description, currentRoom) {
-    // Fill this in
+  constructor(name, description, currentRoom, cooldown = 3000) {
+    super(name, description, currentRoom)
+    this.cooldown = cooldown;
+    this.items= [];
+    this.attackTarget = null;
   }
 
   setPlayer(player) {
@@ -12,8 +19,23 @@ class Enemy extends Character {
 
 
   randomMove() {
-    // Fill this in
-  }
+        //Object.keys(this.currentRoom.exits)
+        let exitArray = Object.keys(this.currentRoom.exits);
+
+        function randomInt (max){
+           return Math.floor(Math.random() * max);
+        }
+        let randomExit = exitArray[randomInt(exitArray.length)];
+
+        let nextRoom = this.currentRoom.getRoomInDirection(randomExit);
+
+        this.currentRoom = nextRoom;
+        
+        this.cooldown += 1000;
+        this.act();
+        }
+
+  
 
   takeSandwich() {
     // Fill this in
@@ -28,19 +50,27 @@ class Enemy extends Character {
 
   rest() {
     // Wait until cooldown expires, then act
-    const resetCooldown = function() {
+    const resetCooldown = () => {
       this.cooldown = 0;
       this.act();
     };
+
     setTimeout(resetCooldown, this.cooldown);
   }
 
   attack() {
-    // Fill this in
+    this.attackTarget.health -= 10;
+    
   }
 
   applyDamage(amount) {
-    // Fill this in
+       this.health -= amount;
+          if (this.health <= 0) {
+            this.die();
+          } else {
+            this.attackTarget = this.player;
+            this.act();
+          }
   }
 
 
@@ -61,13 +91,10 @@ class Enemy extends Character {
 
   scratchNose() {
     this.cooldown += 1000;
-
     this.alert(`${this.name} scratches its nose`);
-
   }
-
-
 }
+
 
 module.exports = {
   Enemy,

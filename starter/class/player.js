@@ -6,6 +6,8 @@ class Player extends Character {
 
   constructor(name, startingRoom) {
     super(name, "main character", startingRoom);
+    this.items = []
+    this.health = 0;
   }
 
   move(direction) {
@@ -35,31 +37,51 @@ class Player extends Character {
 
   takeItem(itemName) {
 
-    // Fill this in
-
+    return this.currentRoom.items.find( 
+        (el) => { 
+            if(el.name === itemName){ 
+                let index =  this.currentRoom.items.indexOf(el) 
+                    this.items.push(el);
+                    this.currentRoom.items.splice(index, 1)      
+            }      
+        })  
   }
 
   dropItem(itemName) {
-
-    // Fill this in
+    return this.items.find( 
+        (el) => { 
+            if(el.name === itemName){ 
+                let index =  this.items.indexOf(el) 
+                    this.items.splice(index,1);
+                    this.currentRoom.items.push(el)    
+            }      
+        })
 
   }
 
   eatItem(itemName) {
-
-    // Fill this in
-
+    return this.items.find( 
+        (el) => { 
+            if(el instanceof Food){
+                if(el.name === itemName){ 
+                    let index =  this.items.indexOf(el) 
+                    this.items.splice(index,1);      
+            }}   
+        })
   }
 
   getItemByName(name) {
+   let result = this.items.find(
+            (el) => name === el.name )
 
-    // Fill this in
-
-  }
+            return result;
+    }
+   
 
   hit(name) {
-
-    // Fill this in
+    if(name instanceof Enemy){
+      this.health = 100;
+    }
 
   }
 
